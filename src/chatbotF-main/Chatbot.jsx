@@ -13,9 +13,7 @@ import {
   BarChart3,
   Shield,
   Clock,
-  Sparkles,
-  ArrowLeft,
-  LogOut
+  Sparkles
 } from 'lucide-react';
 import './Chatbot.css';
 
@@ -31,27 +29,27 @@ const Chatbot = ({ onBackToDashboard, onLogout }) => {
   const textareaRef = useRef(null);
   const resultRef = useRef(null);
 
-  // CORRECTION : Gestion SIMPLIFIÉE des boutons
-  const handleBackClick = () => {
-    console.log('Bouton Retour cliqué - Fonction appelée:', !!onBackToDashboard);
+  // Fonction pour retourner au dashboard
+  const handleBackToDashboard = () => {
+    console.log('Retour au dashboard cliqué');
     if (onBackToDashboard && typeof onBackToDashboard === 'function') {
       onBackToDashboard();
     } else {
-      console.warn('onBackToDashboard non disponible');
-      // Fallback simple
-      window.history.back();
+      // Fallback: redirection directe
+      window.location.href = '/dashboard';
     }
   };
 
-  const handleLogoutClick = () => {
-    console.log('Bouton Déconnexion cliqué - Fonction appelée:', !!onLogout);
+  // Fonction simple pour la déconnexion
+  const handleLogout = () => {
+    console.log('Déconnexion cliquée');
     if (onLogout && typeof onLogout === 'function') {
       onLogout();
     } else {
-      console.warn('onLogout non disponible');
-      // Fallback simple
-      localStorage.clear();
-      window.location.reload();
+      // Fallback: déconnexion manuelle
+      localStorage.removeItem('authToken');
+      localStorage.removeItem('userData');
+      window.location.href = '/login';
     }
   };
 
@@ -183,20 +181,18 @@ const Chatbot = ({ onBackToDashboard, onLogout }) => {
         </div>
       </div>
 
-      {/* CORRECTION : Boutons de navigation SIMPLIFIÉS */}
+      {/* Liens de navigation */}
       <div className="chatbot-navigation-buttons">
         <button 
-          onClick={handleBackClick}
-          className="nav-btn back-btn"
+          onClick={handleBackToDashboard}
+          className="nav-link back-link"
         >
-          <ArrowLeft size={18} />
-          Retour Dashboard
+          ← Retour Dashboard
         </button>
         <button 
-          onClick={handleLogoutClick}
-          className="nav-btn logout-btn"
+          onClick={handleLogout}
+          className="nav-link logout-link"
         >
-          <LogOut size={18} />
           Déconnexion
         </button>
       </div>

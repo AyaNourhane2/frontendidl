@@ -841,3 +841,56 @@ body {
 .result-text::-webkit-scrollbar-thumb:hover {
   background: var(--gradient-secondary);
 }
+/* Styles pour les liens de navigation */
+.chatbot-navigation-buttons {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 1000;
+  display: flex;
+  gap: 10px;
+}
+
+.nav-link {
+  display: inline-block;
+  padding: 10px 20px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 14px;
+}
+
+.nav-link:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* Style spécifique pour le bouton de déconnexion */
+.logout-link {
+  background: rgba(239, 68, 68, 0.2);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.logout-link:hover {
+  background: rgba(239, 68, 68, 0.3);
+}
+
+/* Style spécifique pour le lien retour */
+.back-link {
+  background: rgba(59, 130, 246, 0.2);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+}
+
+.back-link:hover {
+  background: rgba(59, 130, 246, 0.3);
+}
+
+/* Supprimer les anciens styles de boutons si existent */

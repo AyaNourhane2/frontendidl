@@ -3,9 +3,8 @@ import LoginApp from '../src/loginF-main/App';
 import StudentApp from '../src/studentF-main/App';
 import CourseApp from '../src/courseF-main/App';
 import Chatbot from '../src/chatbotF-main/App';
-
-
 import './App.css';
+
 function App() {
   const [currentApp, setCurrentApp] = useState('login');
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -29,8 +28,66 @@ function App() {
     setCurrentApp(app);
   };
 
+  // Vérifier l'URL au chargement
+  useEffect(() => {
+    const path = window.location.pathname;
+    if (isAuthenticated) {
+      switch(path) {
+        case '/student':
+          setCurrentApp('students');
+          break;
+        case '/cour':
+          setCurrentApp('courses');
+          break;
+        case '/chatbot':
+          setCurrentApp('chatbot');
+          break;
+        case '/admin':
+          setCurrentApp('admin');
+          break;
+        case '/dashboard':
+        case '/':
+          setCurrentApp('dashboard');
+          break;
+        default:
+          setCurrentApp('dashboard');
+      }
+    }
+  }, [isAuthenticated]);
+
+  // Mettre à jour l'URL quand l'application change
+  useEffect(() => {
+    if (isAuthenticated) {
+      let path = '/';
+      switch(currentApp) {
+        case 'students':
+          path = '/student';
+          break;
+        case 'courses':
+          path = '/cour';
+          break;
+        case 'chatbot':
+          path = '/chatbot';
+          break;
+        case 'admin':
+          path = '/admin';
+          break;
+        case 'dashboard':
+          path = '/dashboard';
+          break;
+        case 'login':
+          path = '/login';
+          break;
+      }
+      window.history.pushState({}, '', path);
+    }
+  }, [currentApp, isAuthenticated]);
+
   // Si non authentifié, afficher l'app login
   if (!isAuthenticated) {
+    if (window.location.pathname !== '/login') {
+      window.history.replaceState({}, '', '/login');
+    }
     return <LoginApp onLogin={handleLogin} />;
   }
 
@@ -109,21 +166,20 @@ function App() {
         </div>
       );
       
- case 'chatbot':
-  return (
-    <div className="app-container">
-      <header className="app-header">
-        <button className="back-btn" onClick={() => navigateTo('dashboard')}>← Retour</button>
-        <h2>Assistant Virtuel</h2>
-        <button className="logout-btn" onClick={handleLogout}>Déconnexion</button>
-      </header>
-      {/* PASSER LES PROPS CORRECTEMENT */}
-      <Chatbot 
-        onBackToDashboard={() => navigateTo('dashboard')}
-        onLogout={handleLogout}
-      />
-    </div>
-  );
+    case 'chatbot':
+      return (
+        <div className="app-container">
+          <header className="app-header">
+            <button className="back-btn" onClick={() => navigateTo('dashboard')}>← Retour</button>
+            <h2>Assistant Virtuel</h2>
+            <button className="logout-btn" onClick={handleLogout}>Déconnexion</button>
+          </header>
+          <Chatbot 
+            onBackToDashboard={() => navigateTo('dashboard')}
+            onLogout={handleLogout}
+          />
+        </div>
+      );
       
     case 'admin':
       return (
@@ -133,7 +189,6 @@ function App() {
             <h2>Panel Administrateur</h2>
             <button className="logout-btn" onClick={handleLogout}>Déconnexion</button>
           </header>
-          {/* Ici vous pouvez utiliser votre app admin existante */}
           <div className="admin-placeholder">
             <h3>Panel Admin</h3>
             <p>Interface d'administration complète</p>
