@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import StudentApp from '../studentF-main/App';
 import CourseApp from '../courseF-main/App';
+import ChatbotApp from '../chatbotF-main/App';
 import "./App.css";
 
 function App() {
@@ -111,6 +112,21 @@ function App() {
     }
   };
 
+  // Fonctions de navigation
+  const handleBackToDashboard = () => {
+    setActiveTab('dashboard');
+  };
+
+  const handleLogout = () => {
+    setIsAdmin(false);
+    setFormData({
+      firstName: "",
+      lastName: "",
+      email: "",
+      password: ""
+    });
+  };
+
   // Si l'utilisateur est admin, afficher la page admin
   if (isAdmin) {
     // SI ON EST DANS L'APP ÉTUDIANTS
@@ -118,11 +134,11 @@ function App() {
       return (
         <div className="full-app-container">
           <div className="app-header">
-            <button className="back-btn" onClick={() => setActiveTab('dashboard')}>
+            <button className="back-btn" onClick={handleBackToDashboard}>
               ← Retour au Dashboard
             </button>
             <h1>Application de Gestion des Étudiants</h1>
-            <button className="logout-btn" onClick={() => setIsAdmin(false)}>
+            <button className="logout-btn" onClick={handleLogout}>
               Déconnexion
             </button>
           </div>
@@ -136,15 +152,27 @@ function App() {
       return (
         <div className="full-app-container">
           <div className="app-header">
-            <button className="back-btn" onClick={() => setActiveTab('dashboard')}>
+            <button className="back-btn" onClick={handleBackToDashboard}>
               ← Retour au Dashboard
             </button>
             <h1>Application de Gestion des Cours</h1>
-            <button className="logout-btn" onClick={() => setIsAdmin(false)}>
+            <button className="logout-btn" onClick={handleLogout}>
               Déconnexion
             </button>
           </div>
           <CourseApp />
+        </div>
+      );
+    }
+
+    // SI ON EST DANS L'APP CHATBOT
+    if (activeTab === 'chatbot') {
+      return (
+        <div className="full-app-container">
+          <ChatbotApp 
+            onBackToDashboard={handleBackToDashboard}
+            onLogout={handleLogout}
+          />
         </div>
       );
     }
@@ -157,7 +185,7 @@ function App() {
           <div>
             <button 
               className="logout-btn"
-              onClick={() => setIsAdmin(false)}
+              onClick={handleLogout}
             >
               Déconnexion
             </button>
@@ -167,7 +195,7 @@ function App() {
         {/* Navigation des onglets */}
         <div className="admin-card">
           <div className="tabs-navigation">
-            {['dashboard', 'students', 'courses', 'calendar', 'reports', 'settings'].map(tab => (
+            {['dashboard', 'students', 'courses', 'chatbot', 'calendar', 'reports', 'settings'].map(tab => (
               <button
                 key={tab}
                 className={`tab-btn ${activeTab === tab ? 'active' : ''}`}
@@ -176,6 +204,7 @@ function App() {
                 {tab === 'dashboard' && '📊 Tableau de bord'}
                 {tab === 'students' && '👨‍🎓 Étudiants'}
                 {tab === 'courses' && '📚 Cours'}
+                {tab === 'chatbot' && '🤖 Chatbot'}
                 {tab === 'calendar' && '📅 Calendrier'}
                 {tab === 'reports' && '📈 Rapports'}
                 {tab === 'settings' && '⚙️ Paramètres'}
@@ -311,6 +340,23 @@ function App() {
                     </div>
                   </div>
                 ))}
+              </div>
+            </div>
+          )}
+
+          {activeTab === 'chatbot' && (
+            <div className="admin-card">
+              <div className="section-header">
+                <h2>Assistant Virtuel Chatbot</h2>
+                <p className="chatbot-description">
+                  Interface de gestion et de configuration de l'assistant virtuel pour répondre aux questions des étudiants.
+                </p>
+              </div>
+              <div className="chatbot-interface">
+                <ChatbotApp 
+                  onBackToDashboard={handleBackToDashboard}
+                  onLogout={handleLogout}
+                />
               </div>
             </div>
           )}

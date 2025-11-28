@@ -39,7 +39,7 @@
 
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-image: url('../studentF-main/public/image.png');
+ 
   color: var(--text-primary);
   transition: var(--transition-slow);
   line-height: 1.6;
@@ -59,8 +59,8 @@ body {
 /* ===== STYLE STUDENT COMME LES CAPTURES ===== */
 .student-container {
   background: 
-    linear-gradient(135deg, rgba(102, 179, 234, 0.9), rgba(118, 75, 162, 0.9)), 
-    url('../studentF-main/public/image.png');
+    linear-gradient(135deg, rgba(102, 179, 234, 0.9), rgba(118, 75, 162, 0.9))
+    ;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;

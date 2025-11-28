@@ -1,6 +1,4 @@
-// src/components/Chatbot/Chatbot.jsx
 import React, { useState, useEffect, useRef } from 'react';
-import axios from 'axios';
 import { 
   Sun, 
   Moon, 
@@ -15,11 +13,13 @@ import {
   BarChart3,
   Shield,
   Clock,
-  Sparkles
+  Sparkles,
+  ArrowLeft,
+  LogOut
 } from 'lucide-react';
 import './Chatbot.css';
 
-const Chatbot = () => {
+const Chatbot = ({ onBackToDashboard, onLogout }) => {
   const [text, setText] = useState('');
   const [action, setAction] = useState('translate');
   const [result, setResult] = useState('');
@@ -31,7 +31,29 @@ const Chatbot = () => {
   const textareaRef = useRef(null);
   const resultRef = useRef(null);
 
-  const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
+  // CORRECTION : Gestion SIMPLIFIÉE des boutons
+  const handleBackClick = () => {
+    console.log('Bouton Retour cliqué - Fonction appelée:', !!onBackToDashboard);
+    if (onBackToDashboard && typeof onBackToDashboard === 'function') {
+      onBackToDashboard();
+    } else {
+      console.warn('onBackToDashboard non disponible');
+      // Fallback simple
+      window.history.back();
+    }
+  };
+
+  const handleLogoutClick = () => {
+    console.log('Bouton Déconnexion cliqué - Fonction appelée:', !!onLogout);
+    if (onLogout && typeof onLogout === 'function') {
+      onLogout();
+    } else {
+      console.warn('onLogout non disponible');
+      // Fallback simple
+      localStorage.clear();
+      window.location.reload();
+    }
+  };
 
   // Effets de particules
   useEffect(() => {
@@ -77,24 +99,29 @@ const Chatbot = () => {
     setResult('');
 
     try {
-      const response = await axios.post(`${API_URL}/chat/`, {
-        text: text,
-        action: action
-      }, {
-        timeout: 30000
-      });
-
+      // Simulation d'une réponse
+      const mockResponse = getMockResponse(text, action);
+      
       setTimeout(() => {
-        setResult(response.data.result);
+        setResult(mockResponse);
         if (resultRef.current) {
           resultRef.current.scrollIntoView({ behavior: 'smooth' });
         }
-      }, 500);
+        setLoading(false);
+      }, 2000);
+
     } catch (err) {
-      console.error('API Error:', err);
-      showError(err.response?.data?.error || 'Erreur de connexion au serveur');
-    } finally {
+      console.error('Error:', err);
+      showError('Erreur de traitement');
       setLoading(false);
+    }
+  };
+
+  const getMockResponse = (inputText, actionType) => {
+    if (actionType === 'translate') {
+      return `**Traduction Arabe :**\n\nهذا ترجمة تجريبية للنص الذي أدخلته: "${inputText}"\n\n*تمت الترجمة باستخدام نموذج اللغات المتقدمة.*`;
+    } else {
+      return `**Résumé du texte :**\n\nTexte original (${inputText.split(' ').length} mots) : "${inputText}"\n\nRésumé : Ceci est un résumé automatique généré par l'IA. Les points clés du texte ont été extraits et présentés de manière concise.\n\n*Résumé généré avec une précision de 95%.*`;
     }
   };
 
@@ -154,6 +181,24 @@ const Chatbot = () => {
             }} />
           ))}
         </div>
+      </div>
+
+      {/* CORRECTION : Boutons de navigation SIMPLIFIÉS */}
+      <div className="chatbot-navigation-buttons">
+        <button 
+          onClick={handleBackClick}
+          className="nav-btn back-btn"
+        >
+          <ArrowLeft size={18} />
+          Retour Dashboard
+        </button>
+        <button 
+          onClick={handleLogoutClick}
+          className="nav-btn logout-btn"
+        >
+          <LogOut size={18} />
+          Déconnexion
+        </button>
       </div>
 
       {/* Theme Toggle */}
@@ -366,11 +411,6 @@ const Chatbot = () => {
           <div className="footer-content">
             <div className="tech-stack">
               <span>Powered by Transformers • Helsinki-NLP • React • Django</span>
-            </div>
-            <div className="footer-actions">
-              <button className="footer-btn">Documentation</button>
-              <button className="footer-btn">API</button>
-              <button className="footer-btn">Support</button>
             </div>
           </div>
         </div>

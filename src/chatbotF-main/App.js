@@ -1,16 +1,13 @@
 import React from 'react';
 import Chatbot from './Chatbot';
-import './Chatbot';
-import './App.css';
 
-function App() {
+const ChatbotApp = ({ onBackToDashboard, onLogout }) => {
   return (
-    <div className="App">
-      <Chatbot />
-    </div>
+    <Chatbot 
+      onBackToDashboard={onBackToDashboard}
+      onLogout={onLogout}
+    />
   );
-}
+};
 
-export default App;
-
-
+export default ChatbotApp;

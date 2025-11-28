@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import LoginApp from '../src/loginF-main/App';
 import StudentApp from '../src/studentF-main/App';
 import CourseApp from '../src/courseF-main/App';
-import ChatbotApp from '../src/chatbotF-main/App';
+import Chatbot from '../src/chatbotF-main/App';
+
 
 import './App.css';
 function App() {
@@ -108,17 +109,21 @@ function App() {
         </div>
       );
       
-    case 'chatbot':
-      return (
-        <div className="app-container">
-          <header className="app-header">
-            <button className="back-btn" onClick={() => navigateTo('dashboard')}>← Retour</button>
-            <h2>Assistant Virtuel</h2>
-            <button className="logout-btn" onClick={handleLogout}>Déconnexion</button>
-          </header>
-          <ChatbotApp />
-        </div>
-      );
+ case 'chatbot':
+  return (
+    <div className="app-container">
+      <header className="app-header">
+        <button className="back-btn" onClick={() => navigateTo('dashboard')}>← Retour</button>
+        <h2>Assistant Virtuel</h2>
+        <button className="logout-btn" onClick={handleLogout}>Déconnexion</button>
+      </header>
+      {/* PASSER LES PROPS CORRECTEMENT */}
+      <Chatbot 
+        onBackToDashboard={() => navigateTo('dashboard')}
+        onLogout={handleLogout}
+      />
+    </div>
+  );
       
     case 'admin':
       return (
