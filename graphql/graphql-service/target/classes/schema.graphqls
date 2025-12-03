@@ -1,0 +1,76 @@
+type Query {
+  students: [Student]
+  courses: [Course]
+  universities: [University]  # 🔥 NOUVEAU
+  studentById(id: ID!): Student
+  courseById(id: ID!): Course
+  universityById(id: ID!): University  # 🔥 NOUVEAU
+  studentsWithCourses: [StudentWithCourses]
+}
+
+type Mutation {
+  # 🔥 MUTATIONS EXISTANTES
+  createStudent(input: StudentInput!): Student
+  createCourse(input: CourseInput!): Course
+  enrollStudent(studentId: ID!, courseId: ID!): EnrollmentResult
+  
+  # 🔥 NOUVELLES MUTATIONS
+  createUniversity(input: UniversityInput!): University
+  assignUniversityToStudent(studentId: ID!, universityId: ID!): Student
+}
+
+type Student {
+  id: ID!
+  firstName: String!
+  lastName: String!
+  email: String!
+  university: University
+}
+
+type University {
+  id: ID!
+  name: String!
+  location: String!
+  students: [Student]  # 🔥 NOUVEAU
+}
+
+type Course {
+  id: ID!
+  name: String!
+  instructor: String!
+  category: String
+  description: String
+}
+
+type StudentWithCourses {
+  student: Student!
+  courses: [Course]!
+  university: University
+}
+
+type EnrollmentResult {
+  success: Boolean!
+  message: String!
+  student: Student
+  course: Course
+}
+
+input StudentInput {
+  firstName: String!
+  lastName: String!
+  email: String!
+  universityId: ID
+}
+
+input CourseInput {
+  name: String!
+  instructor: String!
+  category: String
+  description: String
+}
+
+# 🔥 NOUVEAU INPUT
+input UniversityInput {
+  name: String!
+  location: String!
+}

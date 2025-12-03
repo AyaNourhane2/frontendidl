@@ -1,0 +1,47 @@
+server:
+  port: 8080
+
+spring:
+  cloud:
+    gateway:
+      routes:
+        # Route GraphQL - CONFIGURATION SPÉCIALE
+        - id: graphql-service
+          uri: http://localhost:8085
+          predicates:
+            - Path=/graphql
+          filters:
+            - SetPath=/graphql
+
+        # Route GraphiQL (interface)
+        - id: graphql-ui
+          uri: http://localhost:8085
+          predicates:
+            - Path=/graphiql
+          filters:
+            - SetPath=/graphiql
+
+        # Vos autres routes existantes...
+        - id: student-service
+          uri: http://localhost:8081
+          predicates:
+            - Path=/api/students/**, /api/universities/**
+          filters:
+            - RewritePath=/api/students/(?<segment>.*), /api/students/$\{segment}
+
+        - id: course-service
+          uri: http://localhost:8082
+          predicates:
+            - Path=/api/courses/**
+
+        - id: chatbot-service
+          uri: http://localhost:8000
+          predicates:
+            - Path=/api/chat/**
+          filters:
+            - RewritePath=/api/(?<segment>.*), /$\{segment}
+
+  cors:
+    allowed-origins: "http://localhost:3000"
+    allowed-methods: "GET,POST,PUT,DELETE,OPTIONS"
+    allowed-headers: "*"

@@ -1,0 +1,27 @@
+server:
+  port: 8085
+
+spring:
+  application:
+    name: graphql-service
+  graphql:
+    graphiql:
+      enabled: true
+      endpoint: /graphql
+    # 🔥 AJOUTER CES LIGNES
+    schema:
+      printer:
+        enabled: true
+    servlet:
+      cors-enabled: true
+
+# Configuration des services
+services:
+  student:
+    base-url: http://localhost:8081/api
+  course:
+    base-url: http://localhost:8082/api
+
+logging:
+  level:
+    com.example.graphql: DEBUG
